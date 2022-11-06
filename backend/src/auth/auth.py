@@ -5,9 +5,9 @@ from jose import jwt
 from urllib.request import urlopen
 
 
-AUTH0_DOMAIN = 'dev-s7ayv28dm215wa3u.us.auth0.com'
+AUTH0_DOMAIN = 'dev-1cv1dc22lqy1i645.us.auth0.com'
 ALGORITHMS = ['RS256']
-API_AUDIENCE = 'my-coffee-shop'
+API_AUDIENCE = 'coffee_shop'
 
 ## AuthError Exception
 '''

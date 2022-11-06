@@ -29,10 +29,11 @@ db_drop_and_create_all()
         or appropriate status code indicating reason for failure
 '''
 @app.route('/drinks')
-def drinks():
+@requires_auth('get:drinks')
+def drinks(payload):
     all_drinks = Drink.query.order_by(Drink.id).all()
     drinks = [drink.short() for drink in all_drinks]
-    if len(drinks) == 0:
+    if not drinks:
         abort(404)
     return jsonify(
         {
@@ -40,7 +41,6 @@ def drinks():
             "drinks": drinks,
         }
     )
-
 
 '''
 @TODO implement endpoint
@@ -51,12 +51,12 @@ def drinks():
         or appropriate status code indicating reason for failure
 '''
 @app.route('/drinks-detail')
-@requires_auth(permission='get:drinks-detail')
+@requires_auth('get:drinks-detail')
 def drinks_detail(payload):
     print(payload)
     all_drinks = Drink.query.order_by(Drink.id).all()
     drinks = [drink.long() for drink in all_drinks]
-    if len(drinks) == 0:
+    if not drinks:
         abort(404)
     return jsonify(
         {
@@ -76,7 +76,7 @@ def drinks_detail(payload):
         or appropriate status code indicating reason for failure
 '''
 @app.route('/drinks', methods=['POST'])
-@requires_auth(permission='post:drinks')
+@requires_auth('post:drinks')
 def create_drink(payload):
     body = request.get_json()
     print(body)
@@ -92,7 +92,7 @@ def create_drink(payload):
             'success': True,
             'drinks': drinks
         })
-    except:
+    except Exception:
         abort(422)
 
 
@@ -108,7 +108,7 @@ def create_drink(payload):
         or appropriate status code indicating reason for failure
 '''
 @app.route('/drinks/<int:id>', methods=['PATCH'])
-@requires_auth(permission='patch:drinks')
+@requires_auth('patch:drinks')
 def patch_drink(payload, id):
     body = request.get_json()
     #print(body)
@@ -128,7 +128,7 @@ def patch_drink(payload, id):
             'success': True,
             'drinks': drinks
         })
-    except:
+    except Exception:
         abort(422)
 
 
@@ -143,7 +143,7 @@ def patch_drink(payload, id):
         or appropriate status code indicating reason for failure
 '''
 @app.route('/drinks/<int:id>', methods=['DELETE'])
-@requires_auth(permission='delete:drinks')
+@requires_auth('delete:drinks')
 def delete_drink(payload, id):
     drink = Drink.query.filter(Drink.id==id).one_or_none()
     if not drink:
@@ -154,7 +154,7 @@ def delete_drink(payload, id):
             'success': True,
             'delete': drink.id
         })
-    except:
+    except Exception:
         abort(422)
 
 
